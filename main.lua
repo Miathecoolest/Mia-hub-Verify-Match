@@ -48,6 +48,27 @@ local BGlCorner = Instance.new("UICorner")
 BGlCorner.CornerRadius = UDim.new(0, 9)
 BGlCorner.Parent = BackgroundImage
 
+-- 2b. Add Top-Right Minimize Button
+local MinimizeButton = Instance.new("TextButton")
+MinimizeButton.Name = "MinimizeButton"
+MinimizeButton.Size = UDim2.new(0, 28, 0, 28)
+MinimizeButton.Position = UDim2.new(1, -38, 0, 10) -- Anchored neatly in the top right
+MinimizeButton.BackgroundColor3 = Color3.fromRGB(35, 40, 55)
+MinimizeButton.Text = "—"
+MinimizeButton.TextColor3 = Color3.fromRGB(168, 218, 255)
+MinimizeButton.Font = Enum.Font.GothamBold
+MinimizeButton.TextSize = 12
+MinimizeButton.ZIndex = 5 -- Ensures it sits on top of backdrops
+MinimizeButton.Parent = MainFrame
+
+local MiniCorner = Instance.new("UICorner")
+MiniCorner.CornerRadius = UDim.new(0, 6)
+MiniCorner.Parent = MinimizeButton
+
+MinimizeButton.MouseButton1Click:Connect(function()
+    MainFrame.Visible = false
+end)
+
 -- 3. Mia Hub Sidebar Panel
 Sidebar.Name = "Sidebar"
 Sidebar.Size = UDim2.new(0, 145, 1, 0)
