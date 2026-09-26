@@ -11,7 +11,7 @@ local TabContainer = Instance.new("Frame")
 local BackgroundImage = Instance.new("ImageLabel")
 local Title = Instance.new("TextLabel")
 
--- Delta Executor Environment Layer Placement Fix
+-- Secure GUI Environment Setup (Optimized for Delta Mobile)
 if gethui then
     ScreenGui.Parent = gethui() -- Safely places it into Delta's interface container
 else
@@ -25,7 +25,7 @@ ScreenGui.ResetOnSpawn = false
 MainFrame.Name = "MainFrame"
 MainFrame.Size = UDim2.new(0, 550, 0, 400)
 MainFrame.Position = UDim2.new(0.5, 0, 0.5, 0) -- Scaled for mobile viewports
-MainFrame.AnchorPoint = Vector2.new(0.5, 0.5)   -- Keeps it in the center
+MainFrame.AnchorPoint = Vector2.new(0.5, 0.5)   -- Keeps it exactly in the center
 MainFrame.BackgroundColor3 = Color3.fromRGB(24, 25, 31)
 MainFrame.BorderSizePixel = 0
 MainFrame.Active = true
