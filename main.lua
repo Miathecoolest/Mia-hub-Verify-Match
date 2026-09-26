@@ -1,5 +1,5 @@
 -- ====================================================================
--- MIA HUB - ADVANCED CLIENT INTERFACE (MULTIPLE TABS + MOBILE TOGGLE)
+-- MIA HUB - ADVANCED CLIENT INTERFACE (DELTA MOBILE OPTIMIZED)
 -- TARGET GAME: 'Verify match'
 -- BACKDROP: Pastel Cinnamoroll Maid Layout (Asset ID: 13542289656)
 -- ====================================================================
@@ -11,10 +11,9 @@ local TabContainer = Instance.new("Frame")
 local BackgroundImage = Instance.new("ImageLabel")
 local Title = Instance.new("TextLabel")
 
--- Secure GUI Environment Setup
-if syn and syn.protect_gui then
-    syn.protect_gui(ScreenGui)
-    ScreenGui.Parent = game:GetService("CoreGui")
+-- Delta Executor Environment Layer Placement Fix
+if gethui then
+    ScreenGui.Parent = gethui() -- Safely places it into Delta's interface container
 else
     ScreenGui.Parent = game:GetService("CoreGui") or game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
 end
@@ -22,10 +21,11 @@ end
 ScreenGui.Name = "MiaHubVerifyMatch"
 ScreenGui.ResetOnSpawn = false
 
--- 1. Main Window Container (Sleek Rounded Edge Design)
+-- 1. Main Window Container (Centering Fix via AnchorPoint)
 MainFrame.Name = "MainFrame"
 MainFrame.Size = UDim2.new(0, 550, 0, 400)
-MainFrame.Position = UDim2.new(0.5, -275, 0.5, -200)
+MainFrame.Position = UDim2.new(0.5, 0, 0.5, 0) -- Scaled for mobile viewports
+MainFrame.AnchorPoint = Vector2.new(0.5, 0.5)   -- Keeps it in the center
 MainFrame.BackgroundColor3 = Color3.fromRGB(24, 25, 31)
 MainFrame.BorderSizePixel = 0
 MainFrame.Active = true
@@ -39,9 +39,10 @@ MainCorner.Parent = MainFrame
 -- 2. Cinnamoroll Theme Background Integration
 BackgroundImage.Name = "CinnamorollBackdrop"
 BackgroundImage.Size = UDim2.new(1, 0, 1, 0)
-BackgroundImage.Image = "rbxassetid://13542289656"
+BackgroundImage.Image = "http://roblox.com"
 BackgroundImage.ImageTransparency = 0.84
 BackgroundImage.ScaleType = Enum.ScaleType.Crop
+BackgroundImage.ZIndex = 1
 BackgroundImage.Parent = MainFrame
 
 local BGlCorner = Instance.new("UICorner")
@@ -52,13 +53,13 @@ BGlCorner.Parent = BackgroundImage
 local MinimizeButton = Instance.new("TextButton")
 MinimizeButton.Name = "MinimizeButton"
 MinimizeButton.Size = UDim2.new(0, 28, 0, 28)
-MinimizeButton.Position = UDim2.new(1, -38, 0, 10) -- Anchored neatly in the top right
+MinimizeButton.Position = UDim2.new(1, -38, 0, 10) 
 MinimizeButton.BackgroundColor3 = Color3.fromRGB(35, 40, 55)
 MinimizeButton.Text = "—"
 MinimizeButton.TextColor3 = Color3.fromRGB(168, 218, 255)
 MinimizeButton.Font = Enum.Font.GothamBold
 MinimizeButton.TextSize = 12
-MinimizeButton.ZIndex = 5 -- Ensures it sits on top of backdrops
+MinimizeButton.ZIndex = 5 
 MinimizeButton.Parent = MainFrame
 
 local MiniCorner = Instance.new("UICorner")
@@ -74,6 +75,7 @@ Sidebar.Name = "Sidebar"
 Sidebar.Size = UDim2.new(0, 145, 1, 0)
 Sidebar.BackgroundColor3 = Color3.fromRGB(16, 17, 22)
 Sidebar.BorderSizePixel = 0
+Sidebar.ZIndex = 2
 Sidebar.Parent = MainFrame
 
 local SideCorner = Instance.new("UICorner")
@@ -87,6 +89,7 @@ Title.Text = "🌸 MIA HUB 🌸"
 Title.TextColor3 = Color3.fromRGB(168, 218, 255)
 Title.Font = Enum.Font.GothamBold
 Title.TextSize = 17
+Title.ZIndex = 3
 Title.Parent = Sidebar
 
 -- 4. Content Area Layout Pages
@@ -94,6 +97,7 @@ TabContainer.Name = "TabContainer"
 TabContainer.Size = UDim2.new(1, -165, 1, -30)
 TabContainer.Position = UDim2.new(0, 155, 0, 15)
 TabContainer.BackgroundTransparency = 1
+TabContainer.ZIndex = 2
 TabContainer.Parent = MainFrame
 
 local Pages = {}
@@ -104,7 +108,8 @@ for _, tabName in ipairs(coreTabs) do
     Page.Name = tabName .. "Page"
     Page.Size = UDim2.new(1, 0, 1, 0)
     Page.BackgroundTransparency = 1
-    Page.Visible = (tabName == "Main") -- Default to showing Main page first
+    Page.Visible = (tabName == "Main") 
+    Page.ZIndex = 3
     Page.Parent = TabContainer
     Pages[tabName] = Page
 end
@@ -120,6 +125,7 @@ for i, tabName in ipairs(coreTabs) do
     TabBtn.TextColor3 = Color3.fromRGB(235, 235, 240)
     TabBtn.Font = Enum.Font.GothamSemibold
     TabBtn.TextSize = 13
+    TabBtn.ZIndex = 4
     TabBtn.Parent = Sidebar
     
     local TabBtnCorner = Instance.new("UICorner")
@@ -150,6 +156,7 @@ local function buildFeatureToggle(name, descriptiveText, positionY, parentPage, 
     RowLabel.TextSize = 14
     RowLabel.TextXAlignment = Enum.TextXAlignment.Left
     RowLabel.BackgroundTransparency = 1
+    RowLabel.ZIndex = 4
     RowLabel.Parent = parentPage
 
     local SwitchBtn = Instance.new("TextButton")
@@ -160,6 +167,7 @@ local function buildFeatureToggle(name, descriptiveText, positionY, parentPage, 
     SwitchBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
     SwitchBtn.Font = Enum.Font.GothamBold
     SwitchBtn.TextSize = 11
+    SwitchBtn.ZIndex = 4
     SwitchBtn.Parent = parentPage
     
     local SwitchCorner = Instance.new("UICorner")
@@ -179,7 +187,6 @@ end
 -- DISTRIBUTED GAME UTILITIES
 -- ====================================================================
 
--- [MAIN PAGE FEATURES]
 local gameCamera = workspace.CurrentCamera
 local priorCamMode = gameCamera.CameraType
 
@@ -194,7 +201,6 @@ buildFeatureToggle("FreeCamToggle", "Free Camera Mode", 20, Pages["Main"], funct
     end
 end)
 
--- [ANSWERS PAGE FEATURES]
 buildFeatureToggle("AutoCorrectToggle", "Auto Correct System", 20, Pages["Answers"], function(isOn)
     if isOn then
         print("Mia Hub: Auto Correct loop active for 'Verify match'.")
@@ -203,7 +209,6 @@ buildFeatureToggle("AutoCorrectToggle", "Auto Correct System", 20, Pages["Answer
     end
 end)
 
--- [SETTINGS PAGE FEATURES]
 local InfoText = Instance.new("TextLabel")
 InfoText.Size = UDim2.new(1, -20, 0, 40)
 InfoText.Position = UDim2.new(0, 10, 0, 20)
@@ -213,6 +218,7 @@ InfoText.Font = Enum.Font.Gotham
 InfoText.TextSize = 13
 InfoText.TextWrapped = true
 InfoText.BackgroundTransparency = 1
+InfoText.ZIndex = 4
 InfoText.Parent = Pages["Settings"]
 
 -- ====================================================================
@@ -221,18 +227,18 @@ InfoText.Parent = Pages["Settings"]
 local ToggleButton = Instance.new("TextButton")
 ToggleButton.Name = "MiaHubToggle"
 ToggleButton.Size = UDim2.new(0, 55, 0, 55)
-ToggleButton.Position = UDim2.new(0.05, 0, 0.2, 0) -- Convenient top left location
+ToggleButton.Position = UDim2.new(0.05, 0, 0.2, 0) 
 ToggleButton.BackgroundColor3 = Color3.fromRGB(16, 17, 22)
 ToggleButton.Text = "MIA"
 ToggleButton.TextColor3 = Color3.fromRGB(168, 218, 255)
 ToggleButton.Font = Enum.Font.GothamBold
 ToggleButton.TextSize = 14
 ToggleButton.Active = true
-ToggleButton.Draggable = true -- Drag the toggle out of your way easily
+ToggleButton.Draggable = true 
 ToggleButton.Parent = ScreenGui
 
 local TglCorner = Instance.new("UICorner")
-TglCorner.CornerRadius = UDim.new(1, 0) -- Perfect Circle layout
+TglCorner.CornerRadius = UDim.new(1, 0) 
 TglCorner.Parent = ToggleButton
 
 local TglStroke = Instance.new("UIStroke")
